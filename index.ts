@@ -45,7 +45,7 @@ export class Robot {
   }
 
   handleInstruction(instruction: Instruction) {
-    log(`\nRobot recieved instruction ${instruction}`);
+    log(`Robot recieved instruction ${instruction}`);
     switch (instruction) {
       case Instruction.forward: {
         this.move();
@@ -111,29 +111,30 @@ export class Mars {
     this.robots.push(robot);
   }
   isOnPlanet(position: Position) {
-    return ( inRange(position.x, 0, this.maxX) || inRange(position.y, 0, this.maxY) ) 
+    return ( inRange(position.x, 0, this.maxX) && inRange(position.y, 0, this.maxY) ) 
   }
   moveRobot(index: number, instructions: Instruction[]) {
     const robot = this.robots[index]
-    
+    let moveCount = 0
     for (let instruction of instructions) {
       const previousPosition = new Position(robot.position.x, robot.position.y);
+      log(`\nMove ${moveCount}`)
+      moveCount++
       robot.handleInstruction(instruction)
       const newPosition = robot.position
       // If out of world bounds, the previous position stinks
+      log(`IS ON PLANET`)
       if ( ! this.isOnPlanet(robot.position) ) {
         log(`Robot fell off world at ${newPosition}`)
         robot.isAlive = false
         log(`Saving scent at ${previousPosition}`)
+        robot.position = previousPosition
         this.scentPositions.push(previousPosition)
         break;
       }      
     };
     
-    log(`Robots final position is ${robot.position}`)
+    log(`Robots final position is ${robot.position} ${robot.orientation}`)
   }
 }
 
-export function run(){
-  
-}
