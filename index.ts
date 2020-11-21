@@ -24,6 +24,9 @@ class Position {
     this.x = x;
     this.y = y;
   }
+  toString(){
+    return `${this.x} ${this.y}`
+  }
 }
 
 export class Robot {
@@ -109,14 +112,13 @@ export class Mars {
     instructions.forEach((instruction) => {
       robot.handleInstruction(instruction)
     });
+    log(`Robots final position is ${robot.position}`)
   }
 }
 
 const planet = new Mars(5, 3);
 const robot = new Robot(1, 1, Orientation.east)
 const instructions = [
-  Instruction.turnRight,
-  Instruction.forward,
   Instruction.turnRight,
   Instruction.forward,
   Instruction.turnRight,
