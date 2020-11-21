@@ -2,34 +2,45 @@ const log = console.log.bind(console)
 
 log("Starting Red Badger Robot Challenge...")
 
-enum Orientation {
+export enum Orientation {
   north,
   south,
   east,
   west,
 }
 
-const directionNames = ['North', 'South', 'East', 'West']
+export const orientationNames = ['North', 'South', 'East', 'West']
 
 enum Instruction {
   forward = "Forward",
   turnLeft = "TurnLeft",
   turnRight = "TurnRight",
 }
-class Robot {
+
+class Position {
   x: number;
   y: number;
-  isAlive: true;
-  orientation: Orientation
-  constructor(x: number, y: number, orientation: Orientation) {
+  constructor(x: number, y: number) {
     this.x = x
     this.y = y
+  }
+}
+
+export class Robot {
+  position: Position;
+  isAlive: boolean;
+  orientation: Orientation
+  identifier: string
+  constructor(identifier: string, x: number, y: number, orientation: Orientation) {
+    this.identifier = identifier
+    this.position = new Position(x, y)
     this.orientation = orientation
     this.isAlive = true
+    log(`Robot spawned at at ${this.position.x}, ${this.position.y} facing ${orientationNames[this.orientation]}. `)
   }
 
   handleInstruction(instruction: Instruction) {
-    log(`Robot was at ${this.x}, ${this.x} facing ${directionNames[this.orientation]}. Recieved instruction ${instruction}`)
+    log(`Robot recieved instruction ${instruction}`)
     switch (instruction) { 
       case Instruction.forward: {
         this.move()
@@ -54,28 +65,43 @@ class Robot {
         break;
       }
     }
-    log(`Robot is now at ${this.x}, ${this.x} facing ${directionNames[this.orientation]}`)
+    log(`Robot is now at ${this.position.x}, ${this.position.y} facing ${orientationNames[this.orientation]}`)
   }
 
   move(){
     switch (this.orientation) {
       case Orientation.north: {
-        this.y++  
+        this.position.y++  
         break;
       }
       case Orientation.south: {
-        this.y--  
+        this.position.y--  
         break;
       }
       case Orientation.east: {
-        this.x--  
+        this.position.x--  
         break;
       }
       case Orientation.west: {
-        this.x++  
+        this.position.x++  
         break;
       }
     }
     // TODO check if out of world bounds 
+  }
+}
+
+export class Mars {
+  maxX: number
+  maxY: number
+  scentPositions: Position[]
+  constructor(x: number, y: number, robots: Robot[]) {
+    this.maxX = x
+    this.maxY = y
+    this.scentPositions = []
+    log(`Starting game`)
+    robots.forEach((robot) => {
+
+    })
   }
 }
