@@ -29,6 +29,10 @@ class Position {
   }
 }
 
+export function inRange(num: number, minimum: number, maximum: number) {
+  return (num >= minimum && num <= maximum) 
+}
+
 export class Robot {
   position: Position;
   isAlive: boolean;
@@ -41,7 +45,7 @@ export class Robot {
   }
 
   handleInstruction(instruction: Instruction) {
-    log(`\nRobot recieved instruction ${instruction}, currently facing ${orientationNames[this.orientation]}`);
+    log(`\nRobot recieved instruction ${instruction}`);
     switch (instruction) {
       case Instruction.forward: {
         this.move();
@@ -89,7 +93,6 @@ export class Robot {
         break;
       }
     }
-    // TODO check if out of world bounds
   }
 }
 
@@ -107,26 +110,30 @@ export class Mars {
   addRobot(robot: Robot) {
     this.robots.push(robot);
   }
+  isOnPlanet(position: Position) {
+    return ( inRange(position.x, 0, this.maxX) || inRange(position.y, 0, this.maxY) ) 
+  }
   moveRobot(index: number, instructions: Instruction[]) {
     const robot = this.robots[index]
-    instructions.forEach((instruction) => {
+    
+    for (let instruction of instructions) {
+      const previousPosition = new Position(robot.position.x, robot.position.y);
       robot.handleInstruction(instruction)
-    });
+      const newPosition = robot.position
+      // If out of world bounds, the previous position stinks
+      if ( ! this.isOnPlanet(robot.position) ) {
+        log(`Robot fell off world at ${newPosition}`)
+        robot.isAlive = false
+        log(`Saving scent at ${previousPosition}`)
+        this.scentPositions.push(previousPosition)
+        break;
+      }      
+    };
+    
     log(`Robots final position is ${robot.position}`)
   }
 }
 
-const planet = new Mars(5, 3);
-const robot = new Robot(1, 1, Orientation.east)
-const instructions = [
-  Instruction.turnRight,
-  Instruction.forward,
-  Instruction.turnRight,
-  Instruction.forward,
-  Instruction.turnRight,
-  Instruction.forward,
-  Instruction.turnRight,
-  Instruction.forward,
-]
-planet.addRobot(robot)
-planet.moveRobot(0, instructions)
+export function run(){
+  
+}
