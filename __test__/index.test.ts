@@ -1,9 +1,7 @@
-import { Robot, Orientation, Mars } from ".."
+import { Robot, Orientation,Instruction, Mars } from "..";
 
-
-describe(`Mars`, () => {
-  test(`Can make Mars`, () => {
-    const steve = new Robot('Steve', 1, 1, Orientation.east)
-    const mars = new Mars(5, 3, [steve])
-  })
-})
+describe(`Game`, () => {
+  test(`Can make Game`, () => {
+    
+  });
+});
